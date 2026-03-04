@@ -26,5 +26,7 @@ public class InquiryService {
     // 추가된 메서드: 특정 닉네임의 리포트만 가져옵니다.
     public List<Inquiry> findByNickname(String nickname) {
         return inquiryRepository.findByNicknameOrderByCreatedAtDesc(nickname);
+
+
     }
 }
