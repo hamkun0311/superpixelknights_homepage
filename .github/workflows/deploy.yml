@@ -39,10 +39,18 @@ jobs:
 
   deploy:
     needs: build-and-push
-    runs-on: self-hosted  # 맥 미니에 설치한 Runner에서 실행
+    runs-on: self-hosted
     steps:
-      - name: Pull latest image and Restart
+      - name: Pull and Restart
         run: |
-          docker pull ${{ secrets.DOCKER_USERNAME }}/superpixelknights_homepage:latest
-          docker-compose up -d
-          docker image prune -f  # 오래된 이미지 삭제
+          # 1. docker-compose.yml 파일이 있는 절대 경로로 이동
+          cd ~/project/2025/superpixelknights
+          
+          # 2. 최신 이미지 내려받기
+          docker-compose pull
+          
+          # 3. 파일 위치를 명시하여 실행 (파일을 못 찾을 경우를 대비)
+          docker-compose -f docker-compose.yml up -d
+          
+          # 4. 안 쓰는 이미지 정리
+          docker image prune -f
