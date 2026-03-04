@@ -1,0 +1,8 @@
+ID,Name_KR,Name_EN,Name_JP,Desc_KR,Desc_EN,Desc_JP,HP,ATK,Cost,CD,MOVE,GOLD,Type
+unit_knight,기사,Knight,ナイト,적을 밀쳐냅니다,Knocks back enemies.,敵をノックバックさせます。,300,30,100,2,1.2,200,Melee
+unit_warrior,전사,Warrior,ウォリアー,높은 체력을 가지고 있습니다,Has high HP,高いHPを持っています。,500,20,30,1,1,100,Melee
+unit_archer,궁수,Archer,アーチャー,긴 사거리를 가지고 있습니다,Has a long attack range.,長い射程距離を持っています。,200,40,30,1,1,100,Ranged
+unit_mage,마법사,Mage,メイジ,다중 투사체 마법을 시전합니다,Fires multiple magic projectiles.,複数の魔法弾を放ちます。,100,10,200,5,0.5,500,Magic
+unit_pirate,해적,Pirate,海賊,광역 데미지 폭탄을 던집니다,Throws AoE damage bombs.,範囲ダメージの爆弾を投げます。,300,20,150,3,1,300,Ranged
+unit_priest,사제,Priest,プリースト,군을 치유합니다,Heals allies.,味方を回復します。,200,20,200,5,0.5,300,Support
+unit_carpenter,목수,Carpenter,大工,성벽을 수리합니다,Repairs the wall.,城壁を修理します。,300,10,100,5,1,200,Support

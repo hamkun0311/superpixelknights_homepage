@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SPK - Magic Scrolls</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+    <style>
+        body { background-color: #1a1a1a; color: #fff; font-family: 'Press Start 2P', cursive; padding: 50px; }
+        .title { text-align: center; color: #00ccff; text-shadow: 4px 4px #000; margin-bottom: 40px; }
+
+        table { width: 100%; border-collapse: collapse; background: #2a2a2a; box-shadow: 10px 10px 0px #000; }
+        th, td { border: 2px solid #444; padding: 12px; text-align: center; font-size: 10px; vertical-align: middle; }
+        th { background: #333; color: #ffcc00; }
+
+        /* 스크롤 아이콘 스타일 */
+        .scroll-icon { width: 40px; height: 40px; image-rendering: pixelated; background: #333; border: 1px solid #444; padding: 5px; }
+
+        /* 등급별 색상 처리 */
+        .grade-S { color: #ff33ff; font-weight: bold; }
+        .grade-A { color: #ffcc00; }
+        .grade-B { color: #33ccff; }
+        .grade-C { color: #33ff33; }
+        .grade-D { color: #aaaaaa; }
+
+        tr:hover { background: #3a3a3a; }
+        .formula { color: #00ffcc; font-size: 9px; }
+
+        .back-btn { display: block; text-align: center; margin-top: 40px; color: #00ccff; text-decoration: none; font-size: 12px; }
+    </style>
+</head>
+
+<body>
+<div th:replace="~{common/header :: headerFragment}"></div>
+<h1 data-ko="마법 스크롤" data-en="MAGIC SCROLLS" data-jp="魔法のスクロール">마법 스크롤</h1>
+
+<table>
+    <thead>
+    <tr>
+        <th>IMG</th>
+        <th data-ko="등급" data-en="GRADE" data-jp="ランク">등급</th>
+        <th data-ko="이름" data-en="NAME" data-jp="名前">이름</th>
+        <th data-ko="효과" data-en="EFFECT" data-jp="効果">효과</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="scroll : ${scrolls}">
+        <td><img th:src="@{'/images/scrolls/' + ${scroll.id} + '.png'}" style="width:40px; image-rendering:pixelated;"/></td>
+        <td th:class="${'grade-' + scroll.grade}" th:text="${scroll.grade}"></td>
+        <td th:data-ko="${scroll.nameKr}" th:data-en="${scroll.nameEn}" th:data-jp="${scroll.nameJp}" th:text="${scroll.nameKr}"></td>
+        <td th:data-ko="${scroll.descKr}" th:data-en="${scroll.descEn}" th:data-jp="${scroll.descJp}" th:text="${scroll.descKr}" style="text-align:left;"></td>
+    </tr>
+    </tbody>
+</table>
+
+<script>
+    function changeLang(lang) {
+        document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('[data-' + lang + ']').forEach(el => {
+            el.innerText = el.getAttribute('data-' + lang);
+        });
+    }
+</script>
+</body>
+</html>

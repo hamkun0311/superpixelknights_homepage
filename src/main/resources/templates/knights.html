@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SPK - Knights</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+    <style>
+        body { background-color: #1a1a1a; color: #fff; font-family: 'Press Start 2P', cursive; padding: 50px 20px; text-align: center; }
+
+        /* 언어 선택 버튼 */
+        .lang-menu { position: fixed; top: 20px; right: 20px; z-index: 1000; background: #2a2a2a; padding: 10px; border: 2px solid #555; }
+        .lang-btn { background: none; border: none; color: #888; cursor: pointer; font-family: 'Press Start 2P'; font-size: 10px; margin: 0 5px; }
+        .lang-btn.active { color: #ffcc00; }
+
+        .container { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; }
+
+        /* 320*190 이미지에 맞춘 카드 디자인 */
+        .knight-card {
+            background: #2a2a2a; border: 4px solid #555; width: 360px;
+            padding: 15px; box-shadow: 8px 8px 0px #000;
+        }
+        .unit-img-box {
+            background: #000; border: 2px solid #444; width: 320px; height: 190px;
+            margin: 0 auto 15px; overflow: hidden;
+        }
+        .unit-img { width: 100%; height: 100%; object-fit: cover; image-rendering: pixelated; }
+
+        .name { font-size: 14px; color: #ffcc00; margin: 10px 0; }
+        .desc { font-size: 9px; line-height: 1.6; color: #ccc; min-height: 45px; margin-bottom: 15px; }
+        .stats { display: flex; justify-content: space-around; font-size: 10px; border-top: 2px solid #444; padding-top: 15px; }
+        .stat-hp { color: #ff5555; } .stat-atk { color: #55ff55; }
+    </style>
+</head>
+<body>
+<div th:replace="~{common/header :: headerFragment}"></div>
+<h1 id="page-title" data-ko="기사단 도감" data-en="KNIGHTS" data-jp="騎士団図鑑">기사단 도감</h1>
+<div class="container">
+    <div th:each="knight : ${knights}" class="knight-card">
+        <div class="unit-img-box">
+            <img th:src="@{'/images/units/' + ${knight.id} + '.jpg'}" class="unit-img" />
+        </div>
+        <div class="name"
+             th:data-ko="${knight.nameKr}"
+             th:data-en="${knight.nameEn}"
+             th:data-jp="${knight.nameJp}" th:text="${knight.nameKr}"></div>
+        <p class="desc"
+           th:data-ko="${knight.descKr}"
+           th:data-en="${knight.descEn}"
+           th:data-jp="${knight.descJp}" th:text="${knight.descKr}"></p>
+        <div class="stats">
+            <span class="stat-hp">HP <span th:text="${knight.hp}"></span></span>
+            <span class="stat-atk">ATK <span th:text="${knight.atk}"></span></span>
+            <span class="stat-atk" style="color:#5555ff">COST <span th:text="${knight.cost}"></span></span>
+        </div>
+    </div>
+</div>
+
+<script>
+    function changeLang(lang) {
+        // 버튼 활성화 표시
+        document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+
+        // data-속성이 있는 모든 엘리먼트 번역
+        document.querySelectorAll('[data-' + lang + ']').forEach(el => {
+            el.innerText = el.getAttribute('data-' + lang);
+        });
+    }
+</script>
+</body>
+</html>

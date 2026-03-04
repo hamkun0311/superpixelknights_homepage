@@ -9,29 +9,55 @@
         body {
             background-color: #1a1a1a; color: #fff;
             font-family: 'Press Start 2P', cursive; font-size: 10px;
-            line-height: 1.8; padding: 20px;
+            line-height: 2; padding: 20px;
         }
-        .container { max-width: 800px; margin: auto; border: 4px solid #555; padding: 20px; background: #2a2a2a; }
-        h1 { color: #ffcc00; font-size: 16px; text-align: center; }
-        h2 { color: #00ff00; font-size: 12px; margin-top: 30px; }
-        p { color: #ccc; }
-        .btn-back { display: inline-block; margin-top: 20px; color: #ffcc00; text-decoration: none; }
+        .container { max-width: 800px; margin: 80px auto 40px; border: 4px solid #555; padding: 30px; background: #2a2a2a; box-shadow: 10px 10px 0px #000; }
+        h1 { color: #ffcc00; font-size: 16px; text-align: center; margin-bottom: 40px; }
+        h2 { color: #00ff00; font-size: 12px; margin-top: 30px; border-bottom: 2px solid #444; padding-bottom: 10px; }
+        p { color: #ccc; margin-top: 10px; word-break: keep-all; }
+        .btn-back { display: inline-block; margin-top: 30px; color: #ffcc00; text-decoration: none; font-size: 8px; }
+        .btn-back:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
+<div th:replace="~{common/header :: headerFragment}"></div>
+
 <div class="container">
-    <h1>[ PRIVACY POLICY ]</h1>
+    <h1 data-ko="[ 개인정보 처리방침 ]"
+        data-en="[ PRIVACY POLICY ]"
+        data-jp="[ プライバシーポリシー ]">[ PRIVACY POLICY ]</h1>
 
-    <h2>1. DATA COLLECTION</h2>
-    <p>Super Pixel Knights does not collect or store any sensitive personal data. We only use nicknames for identification within the game and support system.</p>
+    <h2 data-ko="1. 데이터 수집"
+        data-en="1. DATA COLLECTION"
+        data-jp="1. データ収集">1. DATA COLLECTION</h2>
+    <p data-ko="Super Pixel Knights는 민감한 개인 정보를 수집하거나 저장하지 않습니다. 게임 내 식별 및 고객 지원을 위해 닉네임만을 사용합니다."
+       data-en="Super Pixel Knights does not collect or store any sensitive personal data. We only use nicknames for identification within the game and support system."
+       data-jp="Super Pixel Knightsは, 敏感な個人情報を収集または保存しません. ゲーム内の識別およびサポートのためにニックネームのみを使用します.">
+        Super Pixel Knights does not collect or store any sensitive personal data. We only use nicknames for identification within the game and support system.
+    </p>
 
-    <h2>2. DATA USAGE</h2>
-    <p>The nicknames and bug reports you provide are used solely for improving the game and responding to inquiries.</p>
+    <h2 data-ko="2. 데이터 사용"
+        data-en="2. DATA USAGE"
+        data-jp="2. データ使用">2. DATA USAGE</h2>
+    <p data-ko="제공해주신 닉네임과 버그 제보 내용은 오직 게임 개선 및 문의 응대를 위해서만 사용됩니다."
+       data-en="The nicknames and bug reports you provide are used solely for improving the game and responding to inquiries."
+       data-jp="提供されたニックネームとバグ報告の内容は, ゲームの改善およびお問い合わせ対応のためにのみ使用されます.">
+        The nicknames and bug reports you provide are used solely for improving the game and responding to inquiries.
+    </p>
 
-    <h2>3. CONTACT</h2>
-    <p>If you have any questions, please contact us via the bug report system.</p>
+    <h2 data-ko="3. 문의처"
+        data-en="3. CONTACT"
+        data-jp="3. お問い合わせ">3. CONTACT</h2>
+    <p data-ko="질문이 있으신 경우, 버그 제보 시스템을 통해 문의해 주시기 바랍니다."
+       data-en="If you have any questions, please contact us via the bug report system."
+       data-jp="ご質問がある場合は, バグ報告システムを通じてお問い合わせください.">
+        If you have any questions, please contact us via the bug report system.
+    </p>
 
-    <a href="/" class="btn-back">&lt; BACK TO HOME</a>
+    <a href="/" class="btn-back"
+       data-ko="< 홈으로 돌아가기"
+       data-en="< BACK TO HOME"
+       data-jp="< ホームに戻る">&lt; BACK TO HOME</a>
 </div>
 </body>
 </html>
