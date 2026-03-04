@@ -27,6 +27,6 @@ public class InquiryService {
     public List<Inquiry> findByNickname(String nickname) {
         return inquiryRepository.findByNicknameOrderByCreatedAtDesc(nickname);
 
-
+  
     }
 }
