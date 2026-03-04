@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPK - Report List</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1a1a1a; color: #fff;
+            font-family: 'Press Start 2P', cursive; font-size: 9px; /* 모바일 대응 폰트 축소 */
+            padding: 15px; margin: 0;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        h2 { color: #ffcc00; text-align: center; margin-bottom: 20px; font-size: 14px; }
+
+        /* 테이블 모바일 최적화 */
+        .table-container { width: 100%; max-width: 600px; overflow-x: auto; }
+        table {
+            width: 100%; border-collapse: collapse; border: 3px solid #555;
+            background-color: #2a2a2a; box-shadow: 6px 6px 0px #000;
+        }
+        th, td {
+            padding: 12px 8px; border: 2px solid #333; text-align: center;
+            word-break: break-all; /* 긴 제목이 넘치지 않게 */
+        }
+        th { background-color: #333; color: #ffcc00; font-size: 8px; }
+        tr:nth-child(even) { background-color: #222; }
+
+        /* 상태별 색상 */
+        .status-pending { color: #ff4444; }
+        .status-done { color: #00ff00; }
+
+        /* 하단 버튼 스타일 */
+        .btn-back {
+            display: block; width: 100%; max-width: 200px;
+            margin-top: 30px; padding: 15px;
+            background-color: #444; color: #fff;
+            text-decoration: none; text-align: center;
+            border: 3px solid #666; box-shadow: 4px 4px 0px #000;
+        }
+        .btn-back:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px #000; }
+    </style>
+</head>
+<body>
+<h2>[ QUEST LOGS ]</h2>
+
+<div class="table-container">
+    <table>
+        <thead>
+        <tr>
+            <th style="width: 15%;">ID</th>
+            <th style="width: 25%;">HERO</th>
+            <th style="width: 40%;">TITLE</th>
+            <th style="width: 20%;">ST</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${inquiries}">
+            <td th:text="${item.id}"></td>
+            <td th:text="${item.nickname}"></td>
+            <td th:text="${item.title}"></td>
+            <td th:class="${item.status == 'PENDING' ? 'status-pending' : 'status-done'}"
+                th:text="${item.status == 'PENDING' ? 'WAIT' : 'OK'}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<a href="/reportWrite" class="btn-back">< BACK</a>
+</body>
+</html>

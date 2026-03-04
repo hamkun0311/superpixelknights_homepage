@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    # 맥 미니의 DDNS 주소와 아까 뚫어둔 33306 포트를 사용합니다.
+    url: jdbc:mysql://ohs99999.gonetis.com:33306/spk_homepage?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul
+    username: spk_admin
+    password: dhgPtjd12#  # 아까 설정하신 비밀번호
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update # 테이블 구조를 코드에 맞춰 자동으로 업데이트해줍니다.
+    show-sql: true     # 실행되는 SQL문을 콘솔에 보여줍니다.
+    properties:
+      hibernate:
+        format_sql: true
+
+  thymeleaf:
+    cache: false # 개발 중에는 화면 수정사항이 바로 반영되도록 캐시를 끕니다.
