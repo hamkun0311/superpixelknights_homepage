@@ -1,0 +1,92 @@
+<div th:fragment="headerFragment">
+    <style>
+        .navbar {
+            position: fixed; top: 0; left: 0; width: 100%;
+            background-color: #2a2a2a; border-bottom: 4px solid #555;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 20px; height: 60px; z-index: 9999; box-sizing: border-box;
+        }
+        .nav-left { display: flex; align-items: center; }
+        .nav-logo img { height: 32px; image-rendering: pixelated; margin-right: 20px; }
+
+        .nav-menu { display: flex; list-style: none; margin: 0; padding: 0; }
+        .nav-item { position: relative; margin: 0 15px; font-size: 10px; cursor: pointer; color: #fff; }
+        .nav-item a { color: inherit; text-decoration: none; }
+        .nav-item:hover > a { color: #ffcc00; }
+
+        .dropdown {
+            display: none; position: absolute; top: 100%; left: 0;
+            background: #2a2a2a; border: 2px solid #555; min-width: 130px;
+            box-shadow: 4px 4px 0px #000; padding: 5px 0;
+        }
+        .nav-item:hover .dropdown { display: block; }
+        .dropdown a { display: block; padding: 10px 15px; font-size: 8px; color: #fff; text-decoration: none; }
+        .dropdown a:hover { background: #444; color: #ffcc00; }
+
+        /* 언어 버튼 스타일 */
+        .nav-lang { display: flex; gap: 10px; border-left: 2px solid #444; padding-left: 20px; }
+        .lang-btn {
+            background: none; border: 1px solid #555; color: #888;
+            cursor: pointer; font-family: 'Press Start 2P'; font-size: 8px;
+            padding: 5px 8px; transition: 0.2s;
+        }
+        .lang-btn.active { color: #ffcc00; border-color: #ffcc00; background: #333; }
+        .lang-btn:hover { color: #fff; border-color: #fff; }
+
+        body { padding-top: 80px !important; }
+    </style>
+
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="/" class="nav-logo">
+                <img src="/images/logo.png" alt="Logo" />
+            </a>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="/">Intro</a></li>
+                <li class="nav-item">
+                    Info ▼
+                    <div class="dropdown">
+                        <a href="/knights">Knights</a>
+                        <a href="/scroll">Scroll</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    Help ▼
+                    <div class="dropdown">
+                        <a href="/reportWrite">Bug & Report</a>
+                        <a href="/privacy">Privacy Policy</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="nav-lang">
+            <button class="lang-btn active" data-lang="ko" onclick="changeLang('ko', this)">KO</button>
+            <button class="lang-btn" data-lang="en" onclick="changeLang('en', this)">EN</button>
+            <button class="lang-btn" data-lang="jp" onclick="changeLang('jp', this)">JP</button>
+        </div>
+    </nav>
+
+    <script>
+        function changeLang(lang, btn) {
+            // 모든 버튼 비활성화 및 클릭된 버튼 활성화
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // 페이지 내의 모든 data-lang 속성 변경
+            document.querySelectorAll('[data-' + lang + ']').forEach(el => {
+                el.innerText = el.getAttribute('data-' + lang);
+            });
+
+            // 로컬 스토리지에 언어 설정 저장 (페이지 이동 시 유지용)
+            localStorage.setItem('preferredLang', lang);
+        }
+
+        // 페이지 로드 시 기존 언어 설정 불러오기
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('preferredLang') || 'ko';
+            const targetBtn = document.querySelector(`.lang-btn[data-lang="${savedLang}"]`);
+            if (targetBtn) targetBtn.click();
+        });
+    </script>
+</div>

@@ -1,0 +1,31 @@
+ID,Grade,Name_KR,Name_EN,Name_JP,Desc_KR,Desc_EN,Desc_JP,Fomula
+book_cooldown,D,빠른 재정비,Quick Prep,素早い再整備,기사단 소환 쿨타임 속도가 IColumn 가속됩니다.,Summon Accelerate +IColumn,騎士の召喚スピード +IColumn,20*%
+book_atk_up,D,전투 훈련,Combat Training,戦闘訓練,기사단 공격력 +IColumn,Unit ATK +IColumn,騎士の攻撃力 +IColumn,10*%
+book_aspd_up,D,무기 숙련,Weapon Mastery,武器熟練,기사단 공격속도 +IColumn,Unit ASPD +IColumn,騎士の攻撃速度 +IColumn,10*%
+book_hp_up,D,체력 단련,Body Training,体力鍛錬,기사단 체력 +IColumn,Unit HP +IColumn,騎士のHP +IColumn,10*%
+book_move_up,D,가벼운 신발,Light Boots,軽い靴,기사단 이동속도 +IColumn,Unit Move Speed +IColumn,騎士の移動速度 +IColumn,10*%
+book_wall_hp,D,강철 성벽,Steel Wall,鋼鉄の城壁,성벽 체력 +IColumn 증가,Wall HP +IColumn,城壁のHP +IColumn,100*%
+book_wall_rep,D,성벽 보수,Wall Repair,城壁補修,성벽 체력 IColumn 회복,Heal Wall HP IColumn,城壁のHPを IColumn 回復,100*%
+book_enchant_fire,D,화염 인챈트,Fire Enchant,火炎エンチャント,공격 시 화염 데미지 추가 (+IColumn),Adds Fire DoT to attacks (+IColumn%),攻撃時、火炎ダメージ追加 (+IColumn),10*%
+book_enchant_ice,D,냉기 인챈트,Ice Enchant,冷気エンチャント,공격 시 적 이동속도 감소 (IColumn),Slows enemies on hit (+IColumn%),攻撃時、敵の移動スピードダウン (IColumn),5*%
+book_enchant_crun,D,번개 인챈트,Thunder Enchant,雷電エンチャント,공격 시 적 공격속도 감소 (IColumn),Puzzy enemies on hit (+IColumn%),攻撃時、敵の攻撃スピードダウン (IColumn),5*%
+book_critical,D,가죽장갑,Leather Gloves,レザーグローブ,IColumn 확률로 데미지의 크리티컬 발동,IColumn chance to deal critical damage,IColumnの確率でクリティカルダメージが発動,5*%
+book_emergency,C,비상 긴축,Blood Money,緊急緊縮,IColumn 확률로 무료 기사단 소환,IColumn chance to summon a free mercenary,IColumn の確率で、コストなしで騎士を召喚,1*%
+book_silver_bag,C,실버 주머니,Silver Bag,シルバー袋,즉시 IColumn 실버 획득,Get IColumn Silver immediately,即座に IColumn シルバーをゲット,100*
+book_gold_mine,C,금광,Gold Mine,金鉱,실버 생산속도 +IColumn,Silver Production +IColumn,シルバー生産スピード +IColumn,10*%
+book_greed,C,탐욕의 주머니,Greed Bag,強欲の袋,적 처치 시 실버 획득량 IColumn 증가,IColumn Bonus Silver on kill,敵を倒した時のシルバー獲得量 +IColumn,10*%
+book_goblin,C,황금 고블린,Golden Goblin,黄金ゴブリン,10초 마다 고블린 출현 (+IColumn 실버),Spawns Golden Goblin every 10 Sec(IColumn Silver),10秒ごとにゴブリン出現 (+IColumn シルバー),200*
+book_volcano,B,화산 폭발,Volcano,火山爆発,10초마다 IColumn 화염데미지의 화산폭발 시전,Cast Volcano IColumn Dmg every 10 Sec,10秒ごとに火山爆発！ (IColumn ダメージ),200*
+book_lightning,B,대격변,Cataclysm,大激変,10초마다 IColumn 번개데미지의 대격변 시전,Cast Cataclysm IColumn Dmg every 10 Sec,10秒ごとに大激変(雷)が発動！ (IColumn ダメージ),200*
+book_icewall,B,얼음폭풍,Ice Storm,氷の嵐,10초 마다 IColumn 얼음데미지의 얼음폭풍 시전,Cast Ice Storm IColumn Dmg every 10 Sec,10秒ごとに氷の嵐が発動！ (IColumn ダメージ),200*
+book_blackhole,B,블랙홀,Black Hole,ブラックホール,10초 마다 IColumn 데미지의 블랙홀 소환,Summons IColumn Dmg Black Hole every 10 Sec,10秒ごとにブラックホール召喚！ (IColumn ダメージ),200*
+book_protection,B,성스러운 가호,Holy Protection,聖なる加護,10초 마다 아군 체력 IColumn 회복,Cast Heals IColumn Ally HP every 10 Sec,10秒ごとに味方のHPを IColumn 回復,200*
+book_cross,A,성스러운 십자가,Holy Cross,聖なる十字架,사망 시 IColumn 확률로 부활,IColumn chance to revive on death,死亡時、IColumn の確率で復活する,5*%
+book_double,A,1+1,Double Hiring,1+1,IColumn 확률로 기사단 추가 소환,IColumn chance to summon extra unit,IColumn の確率で騎士を追加で召喚する,5*%
+book_hero,A,영웅 출현,Hero Appearance,英雄出現,IColumn 확률로 강화된 기사단 소환,IColumn chance to summon Elite Unit,IColumn の確率で倍強化された騎士を召喚,10*%
+book_magnet,A,자석 폭탄,Magnet Bomb,磁石爆弾,처치 시 IColumn 확률로 적을 끌어당김,IColumn chance to pull enemies on kill,敵を倒すと、IColumn の確率で敵を引き寄せる,5*%
+book_guardian,A,수호자의 영혼,Guardian Spirit,守護者の魂,매 초당 IColumn 피해를 주는 영혼 소환,Summons Spirit (IColumn DMG every seconds),毎秒 IColumn ダメージを与える魂を召喚,200*
+book_slot,S,슬롯머신,Jackpot,スロットマシン,777 당첨 시 IColumn 실버 획득(성공확률 10%),If you 777 you win IColumn Silver,777当選時、IColumn シルバーをゲット (確率10%),5000*
+book_capitalist,S,자본가,Capitalist,資本家,보유 실버 IColumn만큼 공격력 증가,ATK up by IColumn of current Silver,保有シルバーの IColumn 分、攻撃力がアップ,10*%
+book_berserker,S,광전사,berserker,バーサーカー,잃은 체력 비율의 IColumn 만큼 유닛 강화,Power up the unit by the amount of IColumn of lost health prob.,失ったHPの IColumn 分、味方を強化,25*%
+book_homerun,S,홈런왕,Home Run King,ホームラン王,IColumn 확률로 적을 날려버림,IColumn chance to knockback far,IColumn の確率で敵を遠くへ吹き飛ばす,5*%
