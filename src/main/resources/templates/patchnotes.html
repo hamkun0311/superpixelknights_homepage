@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patch Notes - Super Pixel Knights</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1a1a1a; color: #fff;
+            font-family: 'Press Start 2P', cursive; font-size: 10px;
+            line-height: 1.6; margin: 0; padding: 0;
+        }
+
+        /* 컨테이너 및 여백 설정 */
+        .container {
+            max-width: 800px; margin: 100px auto 50px; padding: 0 20px;
+        }
+
+        h1 {
+            color: #ffcc00; text-align: center; font-size: 18px;
+            margin-bottom: 40px; text-shadow: 4px 4px 0px #000;
+        }
+
+        /* 패치 아이템 카드 스타일 */
+        .patch-item {
+            background: #2a2a2a; border: 4px solid #555;
+            padding: 25px; margin-bottom: 30px;
+            box-shadow: 8px 8px 0px #000;
+            image-rendering: pixelated;
+        }
+
+        .patch-header {
+            display: flex; justify-content: space-between;
+            border-bottom: 2px solid #444; padding-bottom: 15px; margin-bottom: 15px;
+        }
+
+        .version { color: #00ff00; font-size: 12px; }
+        .date { color: #888; font-size: 8px; align-self: center; }
+
+        .patch-content h3 { color: #ffcc00; font-size: 12px; margin: 10px 0; }
+        .patch-content p {
+            color: #ccc; font-size: 9px; line-height: 1.8;
+            white-space: pre-wrap; word-break: break-all;
+        }
+
+        /* 더 보기 버튼 스타일 */
+        .more-container { text-align: center; margin-top: 40px; }
+        #btn-more {
+            background: #2a2a2a; border: 4px solid #ffcc00; color: #ffcc00;
+            padding: 15px 30px; font-family: 'Press Start 2P'; font-size: 10px;
+            cursor: pointer; transition: 0.2s; box-shadow: 4px 4px 0px #000;
+        }
+        #btn-more:hover { background: #ffcc00; color: #000; box-shadow: none; transform: translate(2px, 2px); }
+        #btn-more:active { transform: translate(4px, 4px); }
+    </style>
+</head>
+<body>
+<div th:replace="~{common/header :: headerFragment}"></div>
+
+<div class="container">
+    <h1 data-ko="[ 패치 노트 ]" data-en="[ PATCH NOTES ]" data-jp="[ アップデート情報 ]">[ PATCH NOTES ]</h1>
+
+    <div id="patch-container">
+        <div th:each="note : ${firstPage.content}" class="patch-item">
+            <div class="patch-header">
+                <span class="version" th:text="${note.version}">v1.0.0</span>
+                <span class="date" th:text="${#temporals.format(note.createdAt, 'yyyy-MM-dd')}">2026-03-05</span>
+            </div>
+            <div class="patch-content">
+                <h3 class="lang-target"
+                    th:data-ko="${note.titleKo}"
+                    th:data-en="${note.titleEn}"
+                    th:data-jp="${note.titleJp}"></h3>
+                <p class="lang-target"
+                   th:data-ko="${note.contentKo}"
+                   th:data-en="${note.contentEn}"
+                   th:data-jp="${note.contentJp}"></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="more-container" th:if="${firstPage.hasNext()}">
+        <button id="btn-more" onclick="loadMore()"
+                data-ko="더 보기 +" data-en="MORE +" data-jp="もっと見る +">MORE +</button>
+    </div>
+</div>
+
+<script>
+    let currentPage = 1;
+
+    // 더 보기 기능 (비동기 호출)
+    async function loadMore() {
+        try {
+            const res = await fetch(`/api/patchnotes?page=${currentPage}`);
+            if (!res.ok) throw new Error("Network response was not ok");
+
+            const data = await res.json();
+            const container = document.getElementById('patch-container');
+            const currentLang = localStorage.getItem('preferredLang') || 'ko';
+
+            data.content.forEach(note => {
+                const html = `
+                    <div class="patch-item">
+                        <div class="patch-header">
+                            <span class="version">${note.version}</span>
+                            <span class="date">${note.createdAt.split('T')[0]}</span>
+                        </div>
+                        <div class="patch-content">
+                            <h3 class="lang-target" data-ko="${note.titleKo}" data-en="${note.titleEn}" data-jp="${note.titleJp}"></h3>
+                            <p class="lang-target" data-ko="${note.contentKo}" data-en="${note.contentEn}" data-jp="${note.contentJp}"></p>
+                        </div>
+                    </div>`;
+                container.insertAdjacentHTML('beforeend', html);
+            });
+
+            // 새로 추가된 요소들에 현재 선택된 언어 적용
+            applyCurrentLanguage(currentLang);
+
+            // 더 이상 가져올 데이터가 없으면 버튼 숨김
+            if (data.last) {
+                document.querySelector('.more-container').style.display = 'none';
+            }
+
+            currentPage++;
+        } catch (error) {
+            console.error("Error loading more patch notes:", error);
+            alert("Failed to load more patch notes.");
+        }
+    }
+
+    // 특정 언어 텍스트를 화면에 렌더링하는 함수
+    function applyCurrentLanguage(lang) {
+        document.querySelectorAll('.lang-target, [data-ko]').forEach(el => {
+            const text = el.getAttribute('data-' + lang);
+            if (text) {
+                // p 태그인 경우 줄바꿈 유지 (\n -> <br> 또는 스타일로 처리)
+                if (el.tagName === 'P') {
+                    el.innerText = text;
+                } else {
+                    el.innerText = text;
+                }
+            }
+        });
+    }
+
+    // 페이지 로드 시 및 언어 변경 이벤트 감지
+    window.addEventListener('DOMContentLoaded', () => {
+        const savedLang = localStorage.getItem('preferredLang') || 'ko';
+        applyCurrentLanguage(savedLang);
+    });
+
+    // 상단바의 언어 클릭 이벤트를 감시하기 위한 Observer (시니어 스타일의 깔끔한 동기화)
+    // 만약 header.html의 changeLang 함수에서 이벤트를 발생시키지 않는다면,
+    // 간단하게 인터벌을 돌리거나 커스텀 이벤트를 사용할 수 있습니다.
+    const originalChangeLang = window.changeLang;
+    window.changeLang = function(lang, btn) {
+        if (originalChangeLang) originalChangeLang(lang, btn);
+        applyCurrentLanguage(lang);
+    };
+</script>
+</body>
+</html>
