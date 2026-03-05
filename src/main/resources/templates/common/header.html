@@ -1,93 +1,155 @@
 <div th:fragment="headerFragment">
     <style>
+        :root {
+            --nav-bg: #2a2a2a;
+            --nav-border: #555;
+            --accent: #ffcc00;
+        }
+
         .navbar {
             position: fixed; top: 0; left: 0; width: 100%;
-            background-color: #2a2a2a; border-bottom: 4px solid #555;
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 0 20px; height: 60px; z-index: 9999; box-sizing: border-box;
+            background-color: var(--nav-bg); border-bottom: 4px solid var(--nav-border);
+            display: flex; align-items: center;
+            padding: 0 15px; height: 60px; z-index: 9999; box-sizing: border-box;
+            /* 데스크탑에서는 드롭다운이 보여야 하므로 visible */
+            overflow: visible;
         }
-        .nav-left { display: flex; align-items: center; }
-        .nav-logo img { height: 32px; image-rendering: pixelated; margin-right: 20px; }
 
-        .nav-menu { display: flex; list-style: none; margin: 0; padding: 0; }
-        .nav-item { position: relative; margin: 0 15px; font-size: 10px; cursor: pointer; color: #fff; }
+        .nav-logo { flex: 0 0 auto; display: flex; align-items: center; z-index: 10001; }
+        .nav-logo img { height: 32px; image-rendering: pixelated; margin-right: 15px; }
+
+        /* 가로 스크롤 컨테이너 */
+        .nav-scroll-container {
+            display: flex; align-items: center; justify-content: space-between;
+            flex: 1; height: 100%;
+        }
+
+        .nav-menu { display: flex; list-style: none; margin: 0; padding: 0; height: 100%; align-items: center; }
+        .nav-item { position: relative; margin: 0 12px; font-size: 10px; cursor: pointer; color: #fff; height: 100%; display: flex; align-items: center; }
         .nav-item a { color: inherit; text-decoration: none; }
-        .nav-item:hover > a { color: #ffcc00; }
+        .nav-item:hover > a, .nav-item.active > a { color: var(--accent); }
 
+        /* 드롭다운 기본 (데스크탑) */
         .dropdown {
             display: none; position: absolute; top: 100%; left: 0;
-            background: #2a2a2a; border: 2px solid #555; min-width: 130px;
-            box-shadow: 4px 4px 0px #000; padding: 5px 0;
+            background: var(--nav-bg); border: 2px solid var(--nav-border); min-width: 140px;
+            box-shadow: 4px 4px 0px #000; padding: 5px 0; z-index: 10005;
         }
         .nav-item:hover .dropdown { display: block; }
-        .dropdown a { display: block; padding: 10px 15px; font-size: 8px; color: #fff; text-decoration: none; }
-        .dropdown a:hover { background: #444; color: #ffcc00; }
+        .dropdown a { display: block; padding: 12px 15px; font-size: 8px; color: #fff; text-decoration: none; }
+        .dropdown a:hover { background: #444; color: var(--accent); }
 
-        /* 언어 버튼 스타일 */
-        .nav-lang { display: flex; gap: 10px; border-left: 2px solid #444; padding-left: 20px; }
+        /* 언어 버튼 섹션 */
+        .nav-lang { display: flex; gap: 8px; border-left: 2px solid #444; padding-left: 15px; margin-left: 10px; flex: 0 0 auto; }
         .lang-btn {
-            background: none; border: 1px solid #555; color: #888;
+            background: none; border: 1px solid var(--nav-border); color: #888;
             cursor: pointer; font-family: 'Press Start 2P'; font-size: 8px;
-            padding: 5px 8px; transition: 0.2s;
+            padding: 5px 8px; transition: 0.1s;
         }
-        .lang-btn.active { color: #ffcc00; border-color: #ffcc00; background: #333; }
-        .lang-btn:hover { color: #fff; border-color: #fff; }
+        .lang-btn.active { color: var(--accent); border-color: var(--accent); background: #333; }
+
+        /* ----------------------------------------- */
+        /* 모바일 대응 (가로 스크롤 및 드롭다운 탈출) */
+        /* ----------------------------------------- */
+        @media (max-width: 768px) {
+            .nav-scroll-container {
+                overflow-x: auto;
+                overflow-y: visible; /* 부모 제약 해제 */
+                white-space: nowrap;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+            }
+            .nav-scroll-container::-webkit-scrollbar { display: none; }
+
+            .nav-menu, .nav-lang { flex: 0 0 auto; }
+
+            /* 모바일에서 드롭다운이 잘리는 문제 해결: position fixed 전략 */
+            .nav-item:hover .dropdown { display: none; } /* 모바일은 hover 끔 */
+            .nav-item.show-mobile .dropdown {
+                display: block;
+                position: fixed; /* 부모 overflow 무시하고 화면 기준으로 배치 */
+                top: 60px; /* navbar 높이만큼 하단 배치 */
+                left: auto;
+                min-width: 160px;
+            }
+        }
 
         body { padding-top: 80px !important; }
     </style>
 
     <nav class="navbar">
-        <div class="nav-left">
-            <a href="/" class="nav-logo">
-                <img src="/images/logo.png" alt="Logo" />
-            </a>
+        <div class="nav-logo">
+            <a href="/"><img src="/images/logo.png" alt="Logo" /></a>
+        </div>
+
+        <div class="nav-scroll-container">
             <ul class="nav-menu">
                 <li class="nav-item"><a href="/">Intro</a></li>
-                <li class="nav-item">
-                    Info ▼
+                <li class="nav-item has-sub" onclick="toggleMobileMenu(this, event)">
+                    <span>Info ▼</span>
                     <div class="dropdown">
                         <a href="/patchnotes">Patch Notes</a>
                         <a href="/knights">Knights</a>
                         <a href="/scroll">Scroll</a>
                     </div>
                 </li>
-                <li class="nav-item">
-                    Help ▼
+                <li class="nav-item has-sub" onclick="toggleMobileMenu(this, event)">
+                    <span>Help ▼</span>
                     <div class="dropdown">
                         <a href="/reportWrite">Bug & Report</a>
                         <a href="/privacy">Privacy Policy</a>
                     </div>
                 </li>
             </ul>
-        </div>
 
-        <div class="nav-lang">
-            <button class="lang-btn active" data-lang="ko" onclick="changeLang('ko', this)">KO</button>
-            <button class="lang-btn" data-lang="en" onclick="changeLang('en', this)">EN</button>
-            <button class="lang-btn" data-lang="jp" onclick="changeLang('jp', this)">JP</button>
+            <div class="nav-lang">
+                <button class="lang-btn active" data-lang="ko" onclick="changeLang('ko', this)">KO</button>
+                <button class="lang-btn" data-lang="en" onclick="changeLang('en', this)">EN</button>
+                <button class="lang-btn" data-lang="jp" onclick="changeLang('jp', this)">JP</button>
+            </div>
         </div>
     </nav>
 
     <script>
+        // 언어 변경 로직
         function changeLang(lang, btn) {
-            // 모든 버튼 비활성화 및 클릭된 버튼 활성화
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+            const targetBtn = btn || document.querySelector(`.lang-btn[data-lang="${lang}"]`);
+            if (targetBtn) targetBtn.classList.add('active');
 
-            // 페이지 내의 모든 data-lang 속성 변경
             document.querySelectorAll('[data-' + lang + ']').forEach(el => {
                 el.innerText = el.getAttribute('data-' + lang);
             });
-
-            // 로컬 스토리지에 언어 설정 저장 (페이지 이동 시 유지용)
             localStorage.setItem('preferredLang', lang);
         }
 
-        // 페이지 로드 시 기존 언어 설정 불러오기
+        // 모바일용 드롭다운 토글 (시니어 스타일: Fixed 포지셔닝 대응)
+        function toggleMobileMenu(el, event) {
+            if (window.innerWidth > 768) return; // 데스크탑은 무시
+
+            event.stopPropagation();
+            const isOpen = el.classList.contains('show-mobile');
+
+            // 다른 메뉴 닫기
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('show-mobile'));
+
+            if (!isOpen) {
+                el.classList.add('show-mobile');
+                // 드롭다운 위치 조정 (선택사항: 클릭한 항목 아래로 fixed 위치 계산)
+                const dropdown = el.querySelector('.dropdown');
+                const rect = el.getBoundingClientRect();
+                dropdown.style.left = rect.left + 'px';
+            }
+        }
+
+        // 배경 클릭 시 드롭다운 닫기
+        document.addEventListener('click', () => {
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('show-mobile'));
+        });
+
         window.addEventListener('DOMContentLoaded', () => {
             const savedLang = localStorage.getItem('preferredLang') || 'ko';
-            const targetBtn = document.querySelector(`.lang-btn[data-lang="${savedLang}"]`);
-            if (targetBtn) targetBtn.click();
+            changeLang(savedLang, document.querySelector(`.lang-btn[data-lang="${savedLang}"]`));
         });
     </script>
 </div>
