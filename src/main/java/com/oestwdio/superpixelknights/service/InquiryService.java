@@ -16,6 +16,7 @@ public class InquiryService {
 
     private final InquiryRepository inquiryRepository;
     private final CommentRepository commentRepository;
+    private final PlayFabService playFabService;       // 플레이팹 서비스 주입 필요
 
     @Transactional
     public void saveInquiry(Inquiry inquiry) {
@@ -33,14 +34,21 @@ public class InquiryService {
 
     @Transactional
     public void saveComment(Long inquiryId, String nickname, String content) {
+        // 1. 원본 리포트 찾기
         Inquiry inquiry = inquiryRepository.findById(inquiryId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid inquiry Id"));
+                .orElseThrow(() -> new IllegalArgumentException("해당 리포트가 없습니다. id=" + inquiryId));
 
+        // 2. 댓글(Comment) 엔티티 생성 및 저장
         Comment comment = new Comment(inquiry, nickname, content);
         commentRepository.save(comment);
 
-        // 답변이 달리면 상태를 'ANSWERED' 또는 'COMPLETED'로 변경
+        // 3. 리포트 상태 업데이트 (PENDING -> ANSWERED)
         inquiry.setStatus("ANSWERED");
+
+        // 4. [수정됨] PlayFab 데이터 업데이트 호출
+        // CloudScript 대신 Java에서 직접 ID를 찾아서 업데이트하는 새 메서드를 호출합니다.
+        // inquiry.getNickname()은 리포트를 작성한 유저의 닉네임입니다.
+        playFabService.updateStatusByDisplayName(inquiry.getNickname(), "ANSWERED");
     }
 
     public Inquiry findById(Long id) {
