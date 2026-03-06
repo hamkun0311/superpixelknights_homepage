@@ -90,14 +90,23 @@ public class InquiryController {
 
     // 댓글 저장 API
     @PostMapping("/commentSave")
-    public String commentSave(@RequestParam Long inquiryId, @RequestParam String content, HttpSession session) {
+    public String commentSave(@RequestParam("inquiryId") Long inquiryId,
+                              @RequestParam("content") String content,
+                              HttpSession session) {
+
+        // 1. 세션에서 현재 접속자 닉네임 가져오기
         String nickname = (String) session.getAttribute("userNickname");
 
-        // 여기서도 본인 계정을 허용해줘야 DB에 저장이 됩니다.
-        if ("admin".equals(nickname) || "test1111#09681".equals(nickname)) {
+        // 2. 권한 체크 (시니어의 방어적 코드: 관리자만 답변 가능)
+        if ("test1111#09681".equals(nickname) || "admin".equals(nickname)) {
+            // 3. 서비스 호출 (DB 저장 + PlayFab 연동)
             inquiryService.saveComment(inquiryId, nickname, content);
+        } else {
+            // 권한이 없으면 리스트로 튕겨내기 (또는 에러 메시지)
+            return "redirect:/reportList";
         }
 
+        // 4. 답변 작성 후 다시 상세 페이지로 이동
         return "redirect:/reportDetail/" + inquiryId;
     }
 }
