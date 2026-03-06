@@ -49,7 +49,7 @@ public class InquiryController {
             return "redirect:/reportWrite";
         }
 
-        if ("admin".equals(nickname)) {
+        if ("test1111#09681".equals(nickname)) {
             // 관리자는 전체 목록 조회
             model.addAttribute("inquiries", inquiryService.findAllInquiries());
         } else {
@@ -69,5 +69,35 @@ public class InquiryController {
     @GetMapping({"/", "/index"})
     public String index() {
         return "index";
+    }
+
+    // 상세 조회 추가 (댓글 목록 포함)
+// 상세 조회 메서드 수정
+    @GetMapping("/reportDetail/{id}")
+    public String reportDetail(@PathVariable Long id, HttpSession session, Model model) {
+        Inquiry inquiry = inquiryService.findById(id);
+        String nickname = (String) session.getAttribute("userNickname");
+
+        model.addAttribute("inquiry", inquiry);
+        model.addAttribute("currentNickname", nickname);
+
+        // [중요] 본인 계정을 관리자로 판단하는 플래그를 모델에 담아주면 HTML이 편해집니다.
+        boolean isAdmin = "admin".equals(nickname) || "test1111#09681".equals(nickname);
+        model.addAttribute("isAdmin", isAdmin);
+
+        return "reportDetail";
+    }
+
+    // 댓글 저장 API
+    @PostMapping("/commentSave")
+    public String commentSave(@RequestParam Long inquiryId, @RequestParam String content, HttpSession session) {
+        String nickname = (String) session.getAttribute("userNickname");
+
+        // 여기서도 본인 계정을 허용해줘야 DB에 저장이 됩니다.
+        if ("admin".equals(nickname) || "test1111#09681".equals(nickname)) {
+            inquiryService.saveComment(inquiryId, nickname, content);
+        }
+
+        return "redirect:/reportDetail/" + inquiryId;
     }
 }
