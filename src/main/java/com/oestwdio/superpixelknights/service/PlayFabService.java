@@ -21,40 +21,41 @@ public class PlayFabService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
+    /**
+     * [최종 통합 메서드] 닉네임으로 유저를 찾아 일반 데이터를 업데이트합니다.
+     */
     public void updateStatusByDisplayName(String displayName, String status) {
         try {
-            // [STEP 1] DisplayName으로 PlayFabId 찾기
+            // 1. 유저 ID 조회
             String playFabId = getPlayFabId(displayName);
-            if (playFabId == null) {
-                System.err.println("유저를 찾을 수 없습니다: " + displayName);
+
+            // [시니어의 팁] ID가 없으면 여기서 멈춰야 400 에러를 안 봅니다.
+            if (playFabId == null || playFabId.isEmpty()) {
+                System.err.println("❌ PlayFab 업데이트 중단: 닉네임 '" + displayName + "'에 해당하는 유저를 찾을 수 없습니다.");
                 return;
             }
 
-            // [STEP 2] 찾은 PlayFabId로 ReadOnlyData 업데이트
-            updateReadOnlyData(playFabId, status);
-            System.out.println("PlayFab 업데이트 성공: " + displayName + " -> " + status);
+            // 2. 일반 데이터(User Data) 업데이트
+            updateUserData(playFabId, status);
 
         } catch (Exception e) {
-            System.err.println("PlayFab 처리 중 오류 발생: " + e.getMessage());
+            System.err.println("❌ PlayFab 통합 처리 오류: " + e.getMessage());
         }
     }
 
-    // 닉네임으로 ID 조회 API
+    // 1. Admin API를 통한 PlayFabId 조회
     private String getPlayFabId(String displayName) {
-        // [수정] Server -> Admin / GetAccountInfo -> GetUserAccountInfo
         String url = String.format("https://%s.playfabapi.com/Admin/GetUserAccountInfo", titleId);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set("X-SecretKey", secretKey); // Admin API도 동일한 시크릿 키를 사용합니다.
+        headers.set("X-SecretKey", secretKey);
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         Map<String, Object> body = new HashMap<>();
-        // [참고] Admin/GetUserAccountInfo는 TitleDisplayName 파라미터를 지원합니다.
         body.put("TitleDisplayName", displayName);
 
-        HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
-
         try {
+            HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
             ResponseEntity<Map> response = restTemplate.postForEntity(url, request, Map.class);
 
             if (response.getBody() != null && response.getBody().get("data") != null) {
@@ -63,14 +64,14 @@ public class PlayFabService {
                 return (String) userInfo.get("PlayFabId");
             }
         } catch (Exception e) {
-            System.err.println("유저 조회 중 오류 발생: " + e.getMessage());
+            System.err.println("⚠️ 유저 ID 조회 실패: " + e.getMessage());
         }
         return null;
     }
 
-    // ID로 데이터 업데이트 API
-    private void updateReadOnlyData(String playFabId, String status) {
-        String url = String.format("https://%s.playfabapi.com/Server/UpdateUserReadOnlyData", titleId);
+    // 2. Server API를 통한 일반 데이터(User Data) 업데이트
+    private void updateUserData(String playFabId, String status) {
+        String url = String.format("https://%s.playfabapi.com/Server/UpdateUserData", titleId);
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-SecretKey", secretKey);
@@ -80,7 +81,12 @@ public class PlayFabService {
         body.put("PlayFabId", playFabId);
         body.put("Data", Map.of("LastReportStatus", status));
 
-        HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
-        restTemplate.postForObject(url, request, String.class);
+        try {
+            HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
+            restTemplate.postForObject(url, request, String.class);
+            System.out.println("✅ PlayFab [User Data] 업데이트 성공: " + playFabId + " (" + status + ")");
+        } catch (Exception e) {
+            System.err.println("⚠️ 데이터 업데이트 실패: " + e.getMessage());
+        }
     }
 }
